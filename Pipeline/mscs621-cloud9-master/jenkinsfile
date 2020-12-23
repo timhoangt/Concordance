@@ -1,0 +1,55 @@
+
+
+pipeline {
+    agent {
+        node {
+            label 'master'
+            customWorkspace '/Users/ronalddartey/Documents/Fall_2020/Cloud_computing/jenkins/workspace'
+            }
+    }
+    stages {
+        stage('Build Code') {
+            steps {
+                echo 'Building Code'
+                sh 'docker build -t swagger_server .'
+            }
+        }
+        stage('Test Code') {
+            steps {
+                sh 'pwd'
+                echo 'Running Server'
+                sh 'docker run --name swagger_server -d -p 8081:8080 swagger_server'
+
+                echo 'Running Tests'
+                sh 'python swagger_server/test/run_tests.py'
+
+                echo 'Shutting Down Server'
+                sh 'docker kill swagger_server'
+                sh 'docker system prune --all -f'
+            }
+        }
+        stage('Upload to SonarQube') {
+            steps {
+                //Add comment
+                echo 'Upload code to sonarQube'
+                sh '/Users/ronalddartey/Downloads/sonar-scanner-4.5.0.2216-macosx/bin/sonar-scanner'
+                //sh '/home/ec2-user/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner'
+            }
+        }
+        stage('Deploy to EBS') {
+            steps {
+                echo 'Deploy code to AWS EBS'
+                sh 'eb init -p python-3.6 MSCS621 --region us-east-2'
+                sh 'eb deploy cloud9-concordance'
+                // sh 'eb create cloud9-concordance'
+                // sh '<EBS command to deploy>'
+
+
+
+                // sh 'eb init --profile jenkins'
+                // sh 'eb deploy'
+
+            }
+        }
+    }
+}

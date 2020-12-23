@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Concordance</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>Analyze English Concordance</h1>
+  <p>Select analyze or locate to process concordance</p>
+</div>
+
+<div class="input-group">
+    <input id="textInput" type="text" class="form-control" aria-label="Text input with dropdown button">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">Dropdown</button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" id="analyze">Analyze</a>
+            <a class="dropdown-item" href="#" id="locate">Locate</a>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="text-center">
+    <h3>Concordance Results</h3>
+</div>
+
+<p id="showData"></p>
+
+<table  id="results" class="table">
+    <!-- <thead class="thead-dark">
+        <tr>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+        </tr>
+    </thead> -->
+
+</table>
+
+<script>
+
+    jQuery("#analyze").click(function (e) {
+            //do something
+            var text = document.getElementById("textInput").value;
+            // console.log("ANALYZE: " + text);
+
+            // displayResults("Token", "Counts");
+
+            var url = "http://localhost:8000/mscs721/concordance/1.0.0/analyze";
+
+            $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            contentType:"text/plain",
+            data: text,
+            success: function (result, status) {
+                console.log("Data: " + result + "\nStatus: " + status);
+                var divContainer = document.getElementById("showData");
+                divContainer.innerHTML = JSON.stringify(result, undefined, 4);
+            }
+            });
+
+        });
+
+    jQuery("#locate").click(function (e) {
+            //do something
+            var text = document.getElementById("textInput").value;
+            // console.log("LOCATE: " + text);
+
+            //  displayResults("Token", "Locations");
+
+            var url = "http://localhost:8000/mscs721/concordance/1.0.0/locate";
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                datatype: "json",
+                contentType: "text/plain",
+                data: text,
+                success: function (result, status) {
+                    console.log("Data: " + result + "\nStatus: " + status);
+                    var divContainer = document.getElementById("showData");
+                    divContainer.innerHTML = JSON.stringify(result, undefined, 4);
+            }
+            });
+
+        });
+
+    function displayResults(th1, th2) {
+
+        //display results in a table form
+
+            // var table = document.getElementById("results");
+
+            // while (table.rows.length > 0) {
+            //     table.deleteRow(0);
+            // }
+
+            // var header = table.createTHead();
+
+            // header.classList.add("thead-dark");
+
+            // var row = header.insertRow(0);
+
+            // var t1 = document.createElement('th');
+
+            // t1.innerHTML = th1;
+
+            // var t2 = document.createElement('th');
+
+            // t2.innerHTML = th2;
+
+            // row.appendChild(t1);
+            // row.appendChild(t2);
+
+
+
+        }
+
+</script>
+
+
+</body>
+</html>
