@@ -1,5 +1,7 @@
 REST server to return the specified JSON concordance based on an arbitrary English input text.
 
+A video walkthrough of the pipeline implementation can be viewed here https://youtu.be/Y309eHMMIww
+
 An example of this in action deployed using Elastic Beanstalk can be found at http://concordance.eba-em3dtx2m.us-west-2.elasticbeanstalk.com/
 
 Any text put in the input box will be sent to my database once the button is pressed if it does not already exist before calculating the answer. If the answer already exists in the database, it will not be calculated but instead pulled from a previous calculation. The answer will then be dispalyed on the bottom.
